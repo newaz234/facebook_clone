@@ -16,12 +16,14 @@
       display: flex;
       flex-wrap:wrap; 
       align-items: center;
-      padding: 20px 15%;
-      justify-content:space-between;
+      padding: 20px 10px;
+      justify-content:center;
+      gap:20px;
+      margin:150px 0;
     }
     .container > div {
   flex: 1 1 45%;          /* desktop এ দুইটি child পাশাপাশি */
-  max-width: 300px;       /* খুব ছোট screen এও minimum width থাকবে */
+   max-width: 300px;       /* খুব ছোট screen এও minimum width থাকবে */
 }
 
 /* Responsive media query */
@@ -37,7 +39,7 @@
 }
 
     .left {
-      max-width: 500px;
+      width: 400px;
     }
 
     .left h1 {
@@ -54,9 +56,9 @@
     }
 
     .login-box {
-      width:300px;
+      width:400px;
       background: #fff;
-      padding: 5%;
+      padding: 2%;
       border-radius: 8px;
       box-shadow: 0px 2px 16px rgba(0,0,0,0.2);
       text-align: center;
@@ -64,13 +66,13 @@
 
     .login-box input {
       width: 100%;        /* সব সময় container-এর প্রস্থ অনুযায়ী adjust হবে */
-  max-width: 400px;   /* খুব বড় screen এ too wide হবে না */
+  max-width: 400px;  /* খুব বড় screen এ too wide হবে না */
   padding: 10px 15px; /* ভেতরের ফাঁকা জায়গা */
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 6px;
   box-sizing: border-box; 
-  margin: 10px 0;
+  margin: 5px 0;
     }
 
     .login-box button {
