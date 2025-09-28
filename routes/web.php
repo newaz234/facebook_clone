@@ -11,3 +11,6 @@ Route::get('/signup', function () {
 Route::get('/hompage', function () {
     return view('hompage');
 });
+Route::get('/profile', function () {
+    return view('profile');
+});
