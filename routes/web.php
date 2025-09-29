@@ -14,3 +14,6 @@ Route::get('/hompage', function () {
 Route::get('/profile', function () {
     return view('profile');
 });
+Route::get('/friends', function () {
+    return view('friends');
+});

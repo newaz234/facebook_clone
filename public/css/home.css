@@ -277,9 +277,7 @@
    right: 10px;
 }
 @media (max-width: 1000px) {
-   .search-container input {
-       display: none;
-   }
+   
    .left-sidebar {
        display:none;
        width:0;

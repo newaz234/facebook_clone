@@ -88,3 +88,15 @@
     border-radius: 50%;
     object-fit: cover;
  }
+ @media (max-width: 1000px)
+ {
+   .search-container input {
+      display: none;
+  }
+ }
+ @media (max-width: 700px)
+ {
+   .nav-icon{
+      display:none;
+   }
+ }

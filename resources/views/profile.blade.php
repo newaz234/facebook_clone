@@ -53,12 +53,12 @@
             <h2 class="sidebar-title">Photos</h2>
             <div class="sidebar-item">
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;">
-                    <div style="background-color: #e4e6eb; height: 80px; border-radius: 8px;"></div>
-                    <div style="background-color: #e4e6eb; height: 80px; border-radius: 8px;"></div>
-                    <div style="background-color: #e4e6eb; height: 80px; border-radius: 8px;"></div>
-                    <div style="background-color: #e4e6eb; height: 80px; border-radius: 8px;"></div>
-                    <div style="background-color: #e4e6eb; height: 80px; border-radius: 8px;"></div>
-                    <div style="background-color: #e4e6eb; height: 80px; border-radius: 8px;"></div>
+                    <div style="background-color: #e4e6eb;  aspect-ratio: 1/1;  border-radius: 8px;"></div>
+                    <div style="background-color: #e4e6eb;  aspect-ratio: 1/1;  border-radius: 8px;"></div>
+                    <div style="background-color: #e4e6eb; aspect-ratio: 1/1;  border-radius: 8px;"></div>
+                    <div style="background-color: #e4e6eb;  aspect-ratio: 1/1;  border-radius: 8px;"></div>
+                    <div style="background-color: #e4e6eb;  aspect-ratio: 1/1;  border-radius: 8px;"></div>
+                    <div style="background-color: #e4e6eb;  aspect-ratio: 1/1;  border-radius: 8px;"></div>
                 </div>
                 <button class="btn btn-secondary" style="width: 100%; margin-top: 10px;">See All Photos</button>
             </div>
@@ -68,15 +68,15 @@
                 <p>834 friends</p>
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 8px;">
                     <div>
-                        <div style="background-color: #e4e6eb; height: 80px; border-radius: 8px;"></div>
+                        <div style="background-color: #e4e6eb;  aspect-ratio: 1/1; ; border-radius: 8px;"></div>
                         <p style="font-size: 12px; margin-top: 4px;">Friend One</p>
                     </div>
                     <div>
-                        <div style="background-color: #e4e6eb; height: 80px; border-radius: 8px;"></div>
+                        <div style="background-color: #e4e6eb; aspect-ratio: 1/1;  border-radius: 8px;"></div>
                         <p style="font-size: 12px; margin-top: 4px;">Friend Two</p>
                     </div>
                     <div>
-                        <div style="background-color: #e4e6eb; height: 80px; border-radius: 8px;"></div>
+                        <div style="background-color: #e4e6eb;  aspect-ratio: 1/1;  border-radius: 8px;"></div>
                         <p style="font-size: 12px; margin-top: 4px;">Friend Three</p>
                     </div>
                 </div>
