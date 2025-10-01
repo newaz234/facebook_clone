@@ -17,3 +17,7 @@ Route::get('/profile', function () {
 Route::get('/friends', function () {
     return view('friends');
 });
+Route::get('/search-result', function () {
+    return view('search-result');
+});
+
