@@ -3,11 +3,12 @@
 @section('title', 'Homepage')
 @section('styles')
 <link rel="stylesheet" href="{{ asset('css/home.css') }}">
- @endsection
+<link rel="stylesheet" href="{{ asset('css/comment.css') }}">
+@endsection
 @section('content')
 
     <!-- Main Content -->
-    <div class="container">
+    <div class="container" id="main">
         <!-- Left Sidebar -->
         <div class="left-sidebar">
             <a href="#" class="sidebar-link">
@@ -123,6 +124,7 @@
             
             <!-- News Feed -->
             <div class="news-feed">
+           
                 <div class="post-header">
                     <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Profile">
                     <div class="post-info">
@@ -130,6 +132,7 @@
                         <span>Yesterday at 3:45 PM · <i class="fas fa-globe-americas"></i></span>
                     </div>
                 </div>
+                @include('comment')
                 <div class="post-content">
                     <p>Just visited the most amazing place! Nature is truly breathtaking 🌲🏔️</p>
                     <img src="https://picsum.photos/id/1018/600/400" alt="Post Image">
@@ -149,13 +152,14 @@
                     </div>
                     <div class="post-button">
                         <i class="far fa-comment"></i>
-                        <span>Comment</span>
+                        <span onclick="openCommentModal()">Comment</span>
                     </div>
                     <div class="post-button">
                         <i class="fas fa-share"></i>
                         <span>Share</span>
                     </div>
                 </div>
+                
             </div>
             
             <div class="news-feed">
@@ -250,23 +254,13 @@
     </div>
 
     <script>
-        // Simple interaction for demonstration
-        document.querySelectorAll('.post-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const action = this.querySelector('span').textContent;
-                alert(`You clicked ${action}`);
-            });
-        });
-        
-        document.querySelector('.post-input input').addEventListener('click', function() {
-            alert('Create a new post');
-        });
-        
-        document.querySelectorAll('.story').forEach(story => {
-            story.addEventListener('click', function() {
-                const user = this.querySelector('.story-username').textContent;
-                alert(`View ${user}'s story`);
-            });
-        });
+function openCommentModal() {
+    document.getElementById('commentModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+function closeCommentModal() {
+    document.getElementById('commentModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
     </script>
 @endsection
