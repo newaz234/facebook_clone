@@ -1,7 +1,14 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
+//Route::post('/signup', [AuthController::class, 'signup'])->name('signup');
+Route::get('/verify', fn() => view('verify'))->name('verify');
+Route::post('/verify', [AuthController::class, 'verifyCode'])->name('verify.code');
+
+
+
 
 Route::get('/', function () {
     return redirect()->route('signup');

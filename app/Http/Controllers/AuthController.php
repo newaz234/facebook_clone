@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,12 +46,18 @@ class AuthController extends Controller
             'month' => $request->month,
             'year' => $request->year,
             'gender' => $request->gender,
+            'verification_code' => rand(100000, 999999),
         ]);
 
         // Auto login after signup
         Auth::login($user);
-
-        return redirect()->route('hompage')->with('success', 'Account created successfully!');
+        Mail::raw('Your verification code is: ' . $user->verification_code, function ($message) use ($user) {
+            $message->to($user->email)
+                    ->subject('Email Verification Code');
+        });
+        session(['email_for_verification' => $user->email]);
+        //return response()->json(['message' => 'Verification code sent to your email.']);
+        return redirect()->route('verify')->with('message', 'Verification code sent to your email.');
     }
 
     // Show login form
@@ -91,4 +98,27 @@ class AuthController extends Controller
     {
         return view('hompage');
     }
+    public function verifyCode(Request $request)
+{
+    $request->validate(['code' => 'required']);
+
+    $email = session('email_for_verification');
+
+    $user = User::where('email', $email)
+                ->where('verification_code', $request->code)
+                ->first();
+
+    if ($user) {
+        $user->is_verified = true;
+        $user->verification_code = null;
+        $user->save();
+
+        session()->forget('email_for_verification');
+
+        return redirect()->route('hompage')->with('success', 'Email verified successfully!');
+    }
+
+    return back()->with('message', 'Invalid verification code!');
+}
+
 }
