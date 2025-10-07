@@ -119,7 +119,12 @@
       font-size: 12px;
       margin-top: 50px;
     }
-    
+    .error-message {
+      color: #d93025;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
   </style>
 </head>
 <body>
@@ -131,13 +136,23 @@
     </div>
     <!-- Login box -->
     <div class="login-box">
-      <form>
-        <input type="text" placeholder="Email address or phone number" required>
-        <input type="password" placeholder="Password" required>
+    @if ($errors->any())
+      <div class="error-message" style="background: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 6px; margin-bottom: 15px;">
+        <ul style="list-style: none; margin: 0; padding: 0;">
+          @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </div>
+    @endif
+      <form method="POST" action="{{ route('login.store') }}">
+      @csrf
+        <input type="text" name="email" placeholder="Email address or phone number" required>
+        <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Log in</button>
         <a href="#">Forgotten password?</a>
         <div class="divider"></div>
-        <button type="button" class="create-btn">Create new account</button>
+        <button type="button" class="create-btn"onclick="window.location.href='{{ route('signup') }}'" >Create new account</button>
       </form>
     </div>
   </div>

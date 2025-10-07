@@ -6,7 +6,13 @@
 <link rel="stylesheet" href="{{ asset('css/comment.css') }}">
 @endsection
 @section('content')
+<div class="content">
+    @if (session('success'))
+      <div class="success-message">{{ session('success') }}</div>
+    @endif
+</div>
 
+    <h2 class="welcome">Welcome to Facebook!</h2>
     <!-- Main Content -->
     <div class="container" id="main">
         <!-- Left Sidebar -->
