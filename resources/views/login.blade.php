@@ -150,7 +150,7 @@
         <input type="text" name="email" placeholder="Email address or phone number" required>
         <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Log in</button>
-        <a href="#">Forgotten password?</a>
+        <a href="{{ route('forget-pass') }}">Forgotten password?</a>
         <div class="divider"></div>
         <button type="button" class="create-btn"onclick="window.location.href='{{ route('signup') }}'" >Create new account</button>
       </form>

@@ -70,12 +70,21 @@
     <h4>Enter the code from your email</h4>
     <p>We’ve sent a verification code to <strong>{{ session('email_for_verification') }}</strong></p>
 
-    <form method="POST" action="{{ route('verify.code') }}">
+    <form method="POST" action="{{ route('verify.pass') }}">
         @csrf
         <input type="text" name="code" class="form-control mb-3 text-center" placeholder="Enter code" required>
+        @if ($errors->any())
+    <div class="error-message" style="background: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 6px; margin-bottom: 15px;">
+        <ul style="list-style: none; margin: 0; padding: 0;">
+            @foreach ($errors->all() as $error)
+               <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+ @endif
         <button type="submit" class="btn btn-primary w-100" >Continue</button>
     </form>
-    <button class="logout" onclick="window.location.href='{{ route('logout') }}'">logout</div>
+    <button class="logout" onclick="window.location.href='{{ route('login') }}'">back to login</div>
 </div>
 
 </body>

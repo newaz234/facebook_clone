@@ -76,6 +76,18 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
+            $user = Auth::user(); // Logged-in user
+
+            // 3️⃣ Check if email is verified
+            if (!$user->is_verified) {
+                Mail::raw('Your verification code is: ' . $user->verification_code, function ($message) use ($user) {
+                    $message->to($user->email)
+                            ->subject('Email Verification Code');
+                });
+                session(['email_for_verification' => $user->email]);
+                return redirect()->route('verify')
+                                 ->with('error', 'Please verify your email first.');
+            }
             return redirect()->route('hompage');
         }
 
@@ -99,26 +111,67 @@ class AuthController extends Controller
         return view('hompage');
     }
     public function verifyCode(Request $request)
-{
-    $request->validate(['code' => 'required']);
-
-    $email = session('email_for_verification');
-
-    $user = User::where('email', $email)
-                ->where('verification_code', $request->code)
-                ->first();
-
-    if ($user) {
-        $user->is_verified = true;
-        $user->verification_code = null;
-        $user->save();
-
-        session()->forget('email_for_verification');
-
-        return redirect()->route('hompage')->with('success', 'Email verified successfully!');
+    {
+        $request->validate(['code' => 'required']);
+    
+        $user = Auth::user();
+    
+        if ($user && $request->code == $user->verification_code) {
+            $user->is_verified = true;
+            $user->save();
+            return redirect()->route('hompage')->with('success', 'Email verified successfully!');
+        }
+    
+        return back()->with('error', 'Invalid verification code.');
     }
-
-    return back()->with('message', 'Invalid verification code!');
-}
-
+    public function verifyUser(Request $request){
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return back()->withErrors([
+                'email' => 'The provided credentials do not match our records.',
+            ])->onlyInput('email');
+        }
+        $user->verification_code = rand(100000, 999999);
+         $user->save();
+        Auth::login($user);
+        Mail::raw('Your verification code for password reset is: ' . $user->verification_code, function ($message) use ($user) {
+            $message->to($user->email)
+                    ->subject('Password Verification Code');
+        });
+        session(['email_for_verification' => $user->email]);
+        return redirect()->route('verify.user')->with('message', 'Verification code sent to your email.');
+    }
+    public function verifyPasscode(Request $request)
+    {
+        $request->validate(['code' => 'required']);
+    
+        $user = Auth::user();
+    
+        if ($user && $request->code == $user->verification_code) {
+            
+            return redirect()->route('reset-pass')->with('success', 'Email verified successfully!');
+        }
+    
+        return back()->withErrors([
+            'code' => 'Verification code is invalid.',
+        ])->onlyInput('code');
+    }
+    public function verifypass(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string|min:6',
+        ]);
+        if( $request->password ==  $request->password_confirmation ){
+            $user = Auth::user(); 
+            $user->password =  $request->password;
+            $user->save();
+            Auth::logout();
+            return redirect()->route('login');
+        }
+        return back()->withErrors(['error' => 'Password did not match']);
+    }
+   
 }
