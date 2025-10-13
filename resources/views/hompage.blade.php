@@ -129,19 +129,22 @@
             </div>
             
             <!-- News Feed -->
+            @foreach($posts as $post)
             <div class="news-feed">
            
                 <div class="post-header">
-                    <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Profile">
+                    <img src="{{ asset('storage/image/profile_pic.png') }}">
                     <div class="post-info">
-                        <h3>Sarah Johnson</h3>
-                        <span>Yesterday at 3:45 PM · <i class="fas fa-globe-americas"></i></span>
+                        <h3>{{ $post->user->first_name  }} {{ $post->user->surname}}  </h3>
+                        <span>{{ $post->created_at->diffForHumans() }}<i class="fas fa-globe-americas"></i></span>
                     </div>
                 </div>
                 @include('comment')
                 <div class="post-content">
-                    <p>Just visited the most amazing place! Nature is truly breathtaking 🌲🏔️</p>
-                    <img src="https://picsum.photos/id/1018/600/400" alt="Post Image">
+                    <p>{{$post->content}}</p>
+                      @if($post->image)
+                        <img src="{{ asset('storage/' . $post->image) }}" alt="Post Image">
+                      @endif
                 </div>
                 <div class="post-stats">
                     <div class="likes">
@@ -167,41 +170,8 @@
                 </div>
                 
             </div>
+            @endforeach
             
-            <div class="news-feed">
-                <div class="post-header">
-                    <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Profile">
-                    <div class="post-info">
-                        <h3>Mike Williams</h3>
-                        <span>Today at 10:15 AM · <i class="fas fa-globe-americas"></i></span>
-                    </div>
-                </div>
-                <div class="post-content">
-                    <p>Just finished my morning run! Feeling energized and ready for the day 💪</p>
-                </div>
-                <div class="post-stats">
-                    <div class="likes">
-                        <i class="fas fa-thumbs-up"></i> 89
-                    </div>
-                    <div class="comments-shares">
-                        23 comments · 5 shares
-                    </div>
-                </div>
-                <div class="post-buttons">
-                    <div class="post-button">
-                        <i class="far fa-thumbs-up"></i>
-                        <span>Like</span>
-                    </div>
-                    <div class="post-button">
-                        <i class="far fa-comment"></i>
-                        <span>Comment</span>
-                    </div>
-                    <div class="post-button">
-                        <i class="fas fa-share"></i>
-                        <span>Share</span>
-                    </div>
-                </div>
-            </div>
         </div>
         
         <!-- Right Sidebar -->
