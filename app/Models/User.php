@@ -21,6 +21,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'gender',
         'verification_code',
         'is_verified',
+        'image',
     ];
 
     protected $hidden = [
@@ -35,4 +36,9 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+    public function posts()
+{
+    return $this->hasMany(Post::class);
+}
+
 }

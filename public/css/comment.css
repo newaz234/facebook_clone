@@ -15,7 +15,6 @@
             max-width: 90%;
             max-height: 80vh;   /* jeno screen theke ber na hoy */
             overflow-y: auto;   /* modal er vitore scroll hobe */
-            padding: 20px;
             border-radius: 10px;
             position: relative;
        }
