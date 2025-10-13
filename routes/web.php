@@ -15,6 +15,8 @@
         //Route::get('/hompage', [AuthController::class, 'hompage'])->name('hompage');
          Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
          Route::get('/hompage', [PostController::class, 'index'])->name('hompage');
+         Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+         Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
         });
     Route::get('/forget-password', fn() => view('forget-pass'))->name('forget-pass');
     Route::get('/reset-password', fn() => view('reset-pass'))->name('reset-pass');

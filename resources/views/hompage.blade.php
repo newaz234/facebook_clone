@@ -4,6 +4,7 @@
 @section('styles')
 <link rel="stylesheet" href="{{ asset('css/home.css') }}">
 <link rel="stylesheet" href="{{ asset('css/comment.css') }}">
+<link rel="stylesheet" href="{{ asset('css/create_post.css') }}">
 @endsection
 @section('content')
 <div class="content">
@@ -18,8 +19,8 @@
         <!-- Left Sidebar -->
         <div class="left-sidebar">
             <a href="#" class="sidebar-link">
-                <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Profile">
-                <span>John Doe</span>
+                <img src="{{ asset('storage/' . $user->image) }}" alt="Profile">
+                <span>{{$user->first_name}} {{$user->surname}}</span>
             </a>
             <a href="#" class="sidebar-link">
                 <i class="fas fa-user-friends"></i>
@@ -108,9 +109,10 @@
             
             <!-- Create Post -->
             <div class="create-post">
+            @include('create_post')
                 <div class="post-input">
-                    <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Profile">
-                    <input type="text" placeholder="What's on your mind, John?">
+                    <img src="{{ asset('storage/' . $user->image) }}" alt="Profile">
+                    <input type="text" placeholder="What's on your mind, {{$user->first_name}}?" onclick="openpostModal()">
                 </div>
                 <div class="post-actions">
                     <div class="post-action live-video">
@@ -131,9 +133,8 @@
             <!-- News Feed -->
             @foreach($posts as $post)
             <div class="news-feed">
-           
                 <div class="post-header">
-                    <img src="{{ asset('storage/image/profile_pic.png') }}">
+                    <img src="{{ asset('storage/'. $post->user->image) }}">
                     <div class="post-info">
                         <h3>{{ $post->user->first_name  }} {{ $post->user->surname}}  </h3>
                         <span>{{ $post->created_at->diffForHumans() }}<i class="fas fa-globe-americas"></i></span>
@@ -236,6 +237,14 @@ function openCommentModal() {
 }
 function closeCommentModal() {
     document.getElementById('commentModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+function openpostModal() {
+    document.getElementById('postModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+function closepostModal() {
+    document.getElementById('postModal').style.display = 'none';
     document.body.style.overflow = 'auto';
 }
     </script>

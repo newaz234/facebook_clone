@@ -28,8 +28,8 @@
         </div>
         
         <div class="user-profile">
-            <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Profile">
-            <span>John</span>
+            <img src="{{ asset('storage/' . $user->image) }}" alt="Profile">
+            <span>{{$user->surname}}</span>
             <i class="fas fa-chevron-down"></i>
         </div>
     </header>
