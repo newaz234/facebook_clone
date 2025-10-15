@@ -53,9 +53,24 @@ public function sentFriendRequests()
     public function friends()
     {
         return $this->belongsToMany(User::class, 'friend_requests', 'sender_id', 'receiver_id')
-                    ->wherePivot('status', 'accepted')
-                    ->withTimestamps();
+        ->wherePivot('status', 'accepted')
+        ->withTimestamps();
     }
+// যাদের আমি ফ্রেন্ড রিকোয়েস্ট পাঠিয়েছি (accepted হয়েছে)
+public function sentFriends()
+{
+    return $this->belongsToMany(User::class, 'friend_requests', 'sender_id', 'receiver_id')
+                ->wherePivot('status', 'accepted')
+                ->withTimestamps();
+}
+
+// যাদের কাছ থেকে আমি রিকোয়েস্ট পেয়েছি (accepted হয়েছে)
+public function receivedFriends()
+{
+    return $this->belongsToMany(User::class, 'friend_requests', 'receiver_id', 'sender_id')
+                ->wherePivot('status', 'accepted')
+                ->withTimestamps();
+}
 
     public function pendingFriendRequests()
     {
@@ -64,8 +79,11 @@ public function sentFriendRequests()
 
     public function mutualFriendsCount($otherUser)
     {
-        return $this->friends()->whereHas('friends', function ($query) use ($otherUser) {
-            $query->where('users.id', $otherUser->id);
-        })->count();
+        $myFriendIds = $this->friends()->pluck('users.id')->toArray();
+$otherFriendIds = $otherUser->friends()->pluck('users.id')->toArray();
+
+$mutualCount = count(array_intersect($myFriendIds, $otherFriendIds));
+
+return $mutualCount;
     }
 }

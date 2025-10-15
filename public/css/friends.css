@@ -292,3 +292,138 @@
 .d-inline {
     display: inline-block;
 }
+/* Add these styles to your existing friends.css */
+
+/* Badge for pending requests */
+.badge {
+    background: #1877f2;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    margin-left: auto;
+}
+
+.menu-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+    padding: 10px;
+}
+
+/* Empty states */
+.no-requests, .no-suggestions, .no-friends {
+    text-align: center;
+    padding: 40px;
+    color: #65676b;
+    font-size: 16px;
+}
+
+/* All Friends Section */
+.friends-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.friend-card {
+    border: 1px solid #e4e6ea;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    background: white;
+}
+
+.friend-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.friend-image {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+}
+
+.friend-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.friend-content {
+    padding: 12px;
+}
+
+.friend-name {
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 15px;
+    color: #050505;
+}
+
+.friend-card .mutual-friends {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    color: #65676b;
+    margin-bottom: 12px;
+}
+
+.friend-card .mutual-avatars {
+    display: flex;
+    margin-right: 8px;
+}
+
+.friend-card .mutual-avatar {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #ddd;
+    border: 2px solid white;
+    margin-left: -4px;
+}
+
+.friend-card .mutual-avatar:first-child {
+    margin-left: 0;
+}
+
+.message-btn {
+    width: 100%;
+    padding: 8px;
+    background: #1877f2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.message-btn:hover {
+    background: #166fe5;
+}
+
+.total-friends {
+    color: #65676b;
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .friends-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+    }
+    
+    .friend-image {
+        height: 150px;
+    }
+}

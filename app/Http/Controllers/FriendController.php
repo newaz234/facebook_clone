@@ -108,4 +108,17 @@ class FriendController extends Controller
         $user=auth::user();
         return view('suggestion', compact('suggestions','user','pendingRequests'));
     }
+    public function allFriends()
+    {
+        $pendingRequests = Auth::user()->pendingFriendRequests()->with('sender')->get();
+        $user = Auth::user();
+        $sentFriends = $user->sentFriends()->get();
+    $receivedFriends = $user->receivedFriends()->get();
+
+    // merge করে duplicate বাদ দাও (id অনুযায়ী)
+    $friends = $sentFriends->merge($receivedFriends)->unique('id')->values();
+
+        $user=auth::user();
+        return view('allfriends', compact('pendingRequests', 'friends','user'));
+    }
 }
