@@ -36,7 +36,7 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="#" class="menu-link">
+                    <a href="{{ route('friends.all') }}" class="menu-link">
                         <div class="icon">👥</div>
                         <span class="menu-text">All friends</span>
                     </a>
