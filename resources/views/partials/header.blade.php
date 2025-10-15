@@ -11,7 +11,7 @@
         
         <div class="nav-icons">
             <div class="nav-icon active">
-                <i class="fas fa-home"></i>
+                <i class="fas fa-home" onclick="window.location.href='{{ route('hompage') }}'"></i>
             </div>
             <div class="nav-icon">
                 <i class="fas fa-users"></i>
@@ -20,7 +20,7 @@
                 <i class="fas fa-store"></i>
             </div>
             <div class="nav-icon">
-                <i class="fas fa-user-group"></i>
+                <i class="fas fa-user-group" onclick="window.location.href='{{ route('friends.index') }}'"></i>
             </div>
             <div class="nav-icon">
                 <i class="fas fa-gamepad"></i>

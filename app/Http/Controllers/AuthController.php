@@ -47,6 +47,7 @@ class AuthController extends Controller
             'year' => $request->year,
             'gender' => $request->gender,
             'verification_code' => rand(100000, 999999),
+            'image'=>"image/profile_pic.png",
         ]);
 
         // Auto login after signup
