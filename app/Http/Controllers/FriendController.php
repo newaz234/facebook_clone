@@ -19,27 +19,11 @@ class FriendController extends Controller
 
     public function sendRequest(Request $request, $userId)
     {
-        $receiver = User::findOrFail($userId);
-
-        // Check if request already exists
-        $existingRequest = FriendRequest::where(function ($query) use ($userId) {
-            $query->where('sender_id', Auth::id())
-                  ->where('receiver_id', $userId);
-        })->orWhere(function ($query) use ($userId) {
-            $query->where('sender_id', $userId)
-                  ->where('receiver_id', Auth::id());
-        })->first();
-
-        if ($existingRequest) {
-            return back()->with('error', 'Friend request already exists.');
-        }
-
         FriendRequest::create([
             'sender_id' => Auth::id(),
             'receiver_id' => $userId,
             'status' => 'pending'
         ]);
-
         return back()->with('success', 'Friend request sent!');
     }
 
@@ -61,7 +45,6 @@ class FriendController extends Controller
                                     ->firstOrFail();
 
         $friendRequest->delete();
-
         return back()->with('success', 'Friend request rejected.');
     }
 

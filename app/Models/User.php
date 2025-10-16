@@ -79,11 +79,14 @@ public function receivedFriends()
 
     public function mutualFriendsCount($otherUser)
     {
-        $myFriendIds = $this->friends()->pluck('users.id')->toArray();
-$otherFriendIds = $otherUser->friends()->pluck('users.id')->toArray();
+        $sentF = $this->sentFriends()->pluck('users.id');
+        $receiveF = $this->receivedFriends()->pluck('users.id');
+        $myfriends = $sentF->merge($receiveF)->unique()->values()->toArray();
+        $sentOF =$otherUser->sentFriends()->pluck('users.id');
+        $receiveOF = $otherUser->receivedFriends()->pluck('users.id');
+        $otherfriends = $sentOF->merge($receiveOF)->unique()->values()->toArray();
+        $mutualCount = count(array_intersect($myfriends,  $otherfriends));
 
-$mutualCount = count(array_intersect($myFriendIds, $otherFriendIds));
-
-return $mutualCount;
+        return $mutualCount;
     }
 }
