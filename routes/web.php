@@ -28,6 +28,10 @@
     Route::delete('/friends/remove-friend/{friend}', [FriendController::class, 'removeFriend'])->name('friends.remove-friend');
     Route::get('/friends/suggestions', [FriendController::class, 'getSuggestions'])->name('friends.suggestions');
     Route::get('/friends/all', [FriendController::class, 'allFriends'])->name('friends.all');
+
+
+    Route::post('/posts/{post}/like', [PostController::class, 'toggleLike'])->name('posts.like');
+
         });
     Route::get('/forget-password', fn() => view('forget-pass'))->name('forget-pass');
     Route::get('/reset-password', fn() => view('reset-pass'))->name('reset-pass');

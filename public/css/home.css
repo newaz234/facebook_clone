@@ -215,6 +215,7 @@
    cursor: pointer;
    color: #65676b;
 }
+
 .post-button:hover {
    background: #f0f2f5;
 }
@@ -222,6 +223,11 @@
    margin-right: 8px;
    font-size: 18px;
 }
+.liked{
+  color:#0c61d1;
+   font-weight: 600;
+}
+
 /* Right Sidebar */
 .right-sidebar {
    width: 25%;

@@ -89,4 +89,9 @@ public function receivedFriends()
 
         return $mutualCount;
     }
+    public function likes()
+{
+    return $this->hasMany(Like::class);
+}
+
 }

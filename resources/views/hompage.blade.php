@@ -149,16 +149,16 @@
                 </div>
                 <div class="post-stats">
                     <div class="likes">
-                        <i class="fas fa-thumbs-up"></i> 245
+                        <i class="fas fa-thumbs-up"></i> <span class="like-count"id="{{$post->id}}">{{ $post->likes()->count() }}</span> Like
                     </div>
+        
                     <div class="comments-shares">
                         45 comments · 12 shares
                     </div>
                 </div>
                 <div class="post-buttons">
-                    <div class="post-button">
-                        <i class="far fa-thumbs-up"></i>
-                        <span>Like</span>
+                    <div class="post-button like-button {{ $post->is_liked ? 'liked' : '' }}" data-post="{{ $post->id }}">
+                        <i class="far fa-thumbs-up"></i>Like
                     </div>
                     <div class="post-button">
                         <i class="far fa-comment"></i>
@@ -247,5 +247,26 @@ function closepostModal() {
     document.getElementById('postModal').style.display = 'none';
     document.body.style.overflow = 'auto';
 }
+document.querySelectorAll('.like-button').forEach(button => {
+    button.addEventListener('click', function () {
+        let postId = this.dataset.post;
+        fetch(`/posts/${postId}/like`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById(postId).innerText = data.likes_count;
+            if(data.status === 'liked') {
+                this.classList.add('liked');
+            } else {
+                this.classList.remove('liked');
+            }
+        });
+    });
+});
     </script>
 @endsection
