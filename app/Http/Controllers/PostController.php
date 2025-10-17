@@ -10,7 +10,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::with('user')->get();
+        $posts = Post::with('user','likes')->latest()->get();
         $user = Auth::user();
         return view('hompage', compact('posts','user'));
     }
@@ -73,5 +73,27 @@ class PostController extends Controller
             'message' => 'Post deleted successfully'
         ]);
     }
+    public function toggleLike(Post $post)
+{
+    $user = auth()->user();
+
+    // Check if already liked
+    $like = $post->likes()->where('user_id', $user->id)->first();
+
+    if ($like) {
+        $like->delete(); // Unlike
+        $status = 'unliked';
+    } else {
+        $post->likes()->create(['user_id' => $user->id]);
+        $status = 'liked';
+    }
+
+    // Return JSON response for AJAX
+    return response()->json([
+        'status' => $status,
+        'likes_count' => $post->likes()->count(),
+    ]);
+}
+
 
 }
