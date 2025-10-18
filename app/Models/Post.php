@@ -23,4 +23,9 @@ public function getIsLikedAttribute()
 {
     return $this->likes()->where('user_id', auth()->id())->exists();
 }
+public function comments()
+{
+    return $this->hasMany(Comment::class)->whereNull('parent_id')->with('user', 'replies.user');
+}
+
 }
