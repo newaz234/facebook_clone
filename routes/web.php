@@ -4,6 +4,8 @@
   use Illuminate\Http\Request;
   use App\Http\Controllers\PostController; 
   use App\Http\Controllers\FriendController; 
+  use App\Http\Controllers\CommentController;
+
   //Route::post('/signup', [AuthController::class, 'signup'])->name('signup');
    Route::get('/verify', fn() => view('verify'))->name('verify');
     Route::post('/verify', [AuthController::class, 'verifyCode'])->name('verify.code'); 
@@ -31,6 +33,14 @@
 
 
     Route::post('/posts/{post}/like', [PostController::class, 'toggleLike'])->name('posts.like');
+
+
+    Route::get('/posts/{post}/comments', [CommentController::class, 'fetch']);
+
+    Route::get('/post/{post}/comments', [CommentController::class, 'getComments'])->name('posts.comments');
+    
+
+    Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 
         });
     Route::get('/forget-password', fn() => view('forget-pass'))->name('forget-pass');
