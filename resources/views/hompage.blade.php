@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="{{ asset('css/home.css') }}">
 <link rel="stylesheet" href="{{ asset('css/comment.css') }}">
 <link rel="stylesheet" href="{{ asset('css/create_post.css') }}">
+<link rel="stylesheet" href="{{ asset('css/post.css') }}">
 @endsection
 @section('content')
 <div class="content">
@@ -20,11 +21,11 @@
         <div class="left-sidebar">
             <a href="#" class="sidebar-link">
                 <img src="{{ asset('storage/' . $user->image) }}" alt="Profile">
-                <span>{{$user->first_name}} {{$user->surname}}</span>
+                <span onclick="window.location.href='{{ route('profile') }}'">{{$user->first_name}} {{$user->surname}}</span>
             </a>
             <a href="#" class="sidebar-link">
                 <i class="fas fa-user-friends"></i>
-                <span>Friends</span>
+                <span onclick="window.location.href='{{ route('friends.index') }}'">Friends</span>
             </a>
             <a href="#" class="sidebar-link">
                 <i class="fas fa-users"></i>
@@ -132,44 +133,7 @@
             
             <!-- News Feed -->
             @foreach($posts as $post)
-            <div class="news-feed">
-                <div class="post-header">
-                    <img src="{{ asset('storage/'. $post->user->image) }}">
-                    <div class="post-info">
-                        <h3>{{ $post->user->first_name  }} {{ $post->user->surname}}  </h3>
-                        <span>{{ $post->created_at->diffForHumans() }}<i class="fas fa-globe-americas"></i></span>
-                    </div>
-                </div>
-              <div id="commentContainer"></div>
-                <div class="post-content">
-                    <p>{{$post->content}}</p>
-                      @if($post->image)
-                        <img src="{{ asset('storage/' . $post->image) }}" alt="Post Image">
-                      @endif
-                </div>
-                <div class="post-stats">
-                    <div class="likes">
-                        <i class="fas fa-thumbs-up"></i> <span class="like-count"id="{{$post->id}}">{{ $post->likes()->count() }}</span> Like
-                    </div>
-        
-                    <div class="comments-shares">
-                        45 comments · 12 shares
-                    </div>
-                </div>
-                <div class="post-buttons">
-                    <div class="post-button like-button {{ $post->is_liked ? 'liked' : '' }}" data-post="{{ $post->id }}">
-                        <i class="far fa-thumbs-up"></i>Like
-                    </div>
-                    <div class="post-button">
-                        <i class="far fa-comment"></i>
-                        <span class="comment-btn"data-post="{{ $post->id }}">Comment</span>
-                    </div>
-                    <div class="post-button">
-                        <i class="fas fa-share"></i>
-                        <span>Share</span>
-                    </div>
-                </div> 
-            </div>
+                @include('partials.post', ['post' => $post])
             @endforeach
             
         </div>
@@ -228,124 +192,8 @@
             </div>
         </div>
     </div>
-
-    <script>
-        // Enable post button
-
-        document.querySelectorAll('.comment-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const postId = this.dataset.post;
-            const container = document.getElementById('commentContainer');
-          fetch(`/post/${postId}/comments`) // controller route
-        .then(res => res.text())
-        .then(html => {
-            container.innerHTML = html;
-            const modal = document.getElementById('commentModal');
-                modal.dataset.post = postId;
-                modal.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-                 const modalContainer = document.getElementById('commentsContainer');
-        fetch(`/posts/${postId}/comments`)
-            .then(res => res.text())
-            .then(html => {
-                modalContainer.innerHTML = html;
-            });
-            const commentModal = document.getElementById('commentModal');
-const commentInput = document.getElementById('commentInput');
-const postBtn = document.getElementById('commentBtn');
-
-// Enable/disable Post button
-function checkPostContent() {
-    const hasText = commentInput.value.trim().length > 0;
-    postBtn.disabled = !hasText;
-    postBtn.style.background = hasText ? 'blue' : '#e4e6eb';
-    postBtn.style.color = hasText ? '#fff' : '#bcc0c4';
-    postBtn.style.cursor = hasText ? 'pointer' : 'not-allowed';
-}
-
-// Listen for typing
-commentInput.addEventListener('input', checkPostContent);
-// Post comment
-postBtn.addEventListener('click', () => {
-    const content = commentInput.value.trim();
-    if (!content) return;
-
-    const postId = document.getElementById('commentModal').dataset.post;
-
-    fetch('{{ route("comments.store") }}', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        },
-        body: JSON.stringify({ post_id: postId, content: content })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            const div = document.createElement('div');
-            div.classList.add('comment');
-            div.innerHTML = `
-                <div class="comment-avatar">
-                    <img src="{{ asset('storage/' . auth()->user()->image) }}" alt="Avatar">
-                </div>
-                <div class="comment-content">
-                    <div class="comment-bubble">
-                        <div class="comment-author">${data.comment.author}</div>
-                        <div class="comment-text">${data.comment.content}</div>
-                    </div>
-                    <div class="comment-meta">
-                        <span class="like-action">Like</span>
-                        <span class="reply-action">Reply</span>
-                        <span>${data.comment.created_at}</span>
-                    </div>
-                </div>
-            `;
-            document.getElementById('commentsContainer').appendChild(div);
-            commentInput.value = '';
-            postBtn.disabled = true;
-            postBtn.style.background='#e4e6eb';
-        }
-    });
-});
-        }); 
-       
-    });
-});
-
-function closeCommentModal() {
-    const modal = document.getElementById('commentModal');
-    modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
-function openpostModal() {
-    document.getElementById('postModal').style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-}
-function closepostModal() {
-    document.getElementById('postModal').style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
-document.querySelectorAll('.like-button').forEach(button => {
-    button.addEventListener('click', function () {
-        let postId = this.dataset.post;
-        fetch(`/posts/${postId}/like`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json'
-            },
-        })
-        .then(res => res.json())
-        .then(data => {
-            document.getElementById(postId).innerText = data.likes_count;
-            if(data.status === 'liked') {
-                this.classList.add('liked');
-            } else {
-                this.classList.remove('liked');
-            }
-        });
-    });
-});
-    </script>
+    <script src="{{ asset('js/post_create.js') }}"></script>
+    <script src="{{ asset('js/like.js') }}"></script>
+    <script src="{{ asset('js/comment.js') }}"></script>
+   
 @endsection

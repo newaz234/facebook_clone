@@ -27,10 +27,9 @@
             </div>
         </div>
         
-        <div class="user-profile">
+        <div class="user-profile" onclick="window.location.href='{{ route('profile') }}'">
             <img src="{{ asset('storage/' . $user->image) }}" alt="Profile">
             <span>{{$user->surname}}</span>
-            <i class="fas fa-chevron-down"></i>
         </div>
     </header>
     
