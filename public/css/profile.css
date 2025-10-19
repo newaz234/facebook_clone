@@ -9,7 +9,15 @@
             margin-right:10%;
             border-radius:1%;
         }
-        
+        .post-button:hover {
+            background: #f0f2f5;
+            cursor:pointer;
+         }
+        .liked{
+            color:#0c61d1;
+             font-weight: 600;
+          }
+          
         .cover-photo {
             height: 350px;
             background: linear-gradient(135deg, #1877f2, #42b883);
@@ -164,144 +172,9 @@
            width:100%;
         }
         
-        .create-post {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-            padding: 16px;
-        }
         
-        .post-input {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
         
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #e4e6eb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #606770;
-        }
-        
-        .post-text {
-            flex: 1;
-            background-color: #f0f2f5;
-            border-radius: 20px;
-            padding: 12px;
-            color: #65676b;
-            cursor: pointer;
-            font-size: 17px;
-        }
-        
-        .post-options {
-            display: flex;
-            justify-content: space-around;
-            border-top: 1px solid #e4e6eb;
-            padding-top: 8px;
-        }
-        
-        .post-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            flex: 1;
-            justify-content: center;
-        }
-        
-        .post-option:hover {
-            background-color: #f0f2f5;
-        }
-        
-        .post-option i {
-            font-size: 24px;
-        }
-        
-        .post-option:nth-child(1) i {
-            color: #f02849;
-        }
-        
-        .post-option:nth-child(2) i {
-            color: #45bd62;
-        }
-        
-        .post-option:nth-child(3) i {
-            color: #f7b928;
-        }
-        
-        .post {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-            padding: 16px;
-        }
-        
-        .post-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-        
-        .post-author {
-            font-weight: 600;
-        }
-        
-        .post-time {
-            color: #65676b;
-            font-size: 14px;
-        }
-        
-        .post-content {
-            margin-bottom: 12px;
-        }
-        
-        .post-image {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            background-color: #e4e6eb;
-            height: 300px;
-        }
-        
-        .post-stats {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #e4e6eb;
-            color: #65676b;
-            font-size: 14px;
-        }
-        
-        .post-actions {
-            display: flex;
-            justify-content: space-around;
-            padding-top: 8px;
-        }
-        
-        .post-action {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            color: #65676b;
-            font-weight: 600;
-        }
-        
-        .post-action:hover {
-            background-color: #f0f2f5;
-        }
+       
         
         /* Right Sidebar */
         .sponsored {

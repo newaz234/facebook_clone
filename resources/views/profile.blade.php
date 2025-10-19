@@ -2,6 +2,9 @@
 @section('title', 'profile')
 @section('styles')
 <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
+<link rel="stylesheet" href="{{ asset('css/post.css') }}">
+<link rel="stylesheet" href="{{ asset('css/create_post.css') }}">
+<link rel="stylesheet" href="{{ asset('css/comment.css') }}">
  @endsection
 
 
@@ -9,16 +12,16 @@
     <!-- Profile Header -->
     <div class="profile-header">
         <div class="cover-photo">
-        <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Profile">
+        <img src="{{ asset('storage/' . $user->image) }}" alt="Profile">
         </div>
         <div class="profile-picture">
-        <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Profile">
+        <img src="{{ asset('storage/' . $user->image) }}" alt="Profile">
         </div>
         <div class="profile-info">
            
             <div class="profile-stats">
-            <h1 class="profile-name">Newaz Mohammad Hamim</h1>
-                <span>834 friends</span>
+            <h1 class="profile-name">{{$user->first_name}} {{$user->surname}}</h1>
+                <span>{{ $friends->count() }} friends</span>
             </div>
            
             <div class="profile-actions">
@@ -30,7 +33,7 @@
             <div class="nav-tabs">
                 <div class="tab active">Posts</div>
                 <div class="tab">About</div>
-                <div class="tab">Friends</div>
+                <div class="tab" onclick="window.location.href='{{ route('friends.index') }}'">Friends</div>
                 <div class="tab">Photos</div>
                 <div class="tab">Videos</div>
                 <div class="tab">Reels</div>
@@ -51,34 +54,54 @@
             </div>
             
             <h2 class="sidebar-title">Photos</h2>
-            <div class="sidebar-item">
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;">
-                    <div style="background-color: #e4e6eb;  aspect-ratio: 1/1;  border-radius: 8px;"></div>
-                    <div style="background-color: #e4e6eb;  aspect-ratio: 1/1;  border-radius: 8px;"></div>
-                    <div style="background-color: #e4e6eb; aspect-ratio: 1/1;  border-radius: 8px;"></div>
-                    <div style="background-color: #e4e6eb;  aspect-ratio: 1/1;  border-radius: 8px;"></div>
-                    <div style="background-color: #e4e6eb;  aspect-ratio: 1/1;  border-radius: 8px;"></div>
-                    <div style="background-color: #e4e6eb;  aspect-ratio: 1/1;  border-radius: 8px;"></div>
-                </div>
-                <button class="btn btn-secondary" style="width: 100%; margin-top: 10px;">See All Photos</button>
+<div class="sidebar-item">
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;">
+
+        {{-- Profile picture --}}
+        @if($user->image)
+            <div style="aspect-ratio: 1/1; border-radius: 8px; overflow:hidden;">
+                <img src="{{ asset('storage/' . $user->image) }}" 
+                     alt="Profile Photo" 
+                     style="width:100%; height:100%; object-fit:cover;">
             </div>
+        @endif
+
+        {{-- Post images --}}
+        @php
+            $photoPosts = $posts->whereNotNull('image')->take(8); // take first 8 post images
+        @endphp
+
+        @forelse($photoPosts as $post)
+            <div style="aspect-ratio: 1/1; border-radius: 8px; overflow:hidden;">
+                <img src="{{ asset('storage/' . $post->image) }}" 
+                     alt="Post Image" 
+                     style="width:100%; height:100%; object-fit:cover;">
+            </div>
+        @empty
+            <div style="grid-column: span 3; text-align:center; padding:10px; color:#65676b;">
+                No photos to show
+            </div>
+        @endforelse
+    </div>
+
+    <button class="btn btn-secondary" style="width: 100%; margin-top: 10px;">
+        See All Photos
+    </button>
+</div>
+
             
             <h2 class="sidebar-title">Friends</h2>
             <div class="sidebar-item">
-                <p>834 friends</p>
+                <p>{{ $friends->count() }} friends</p>
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 8px;">
+                @foreach($friends->take(9) as $friend)
                     <div>
-                        <div style="background-color: #e4e6eb;  aspect-ratio: 1/1; ; border-radius: 8px;"></div>
-                        <p style="font-size: 12px; margin-top: 4px;">Friend One</p>
+                        <div style="background-color: #e4e6eb;  aspect-ratio: 1/1; ; border-radius: 8px;">
+                        <img src="{{ $friend->image ? asset('storage/' . $friend->image) : 'https://randomuser.me/api/portraits/men/2.jpg' }}" style="width:100%; height:100%; object-fit:cover;">
+                        </div>
+                        <p style="font-size: 12px; margin-top: 4px;">{{ $friend->first_name }} {{ $friend->surname }}</p>
                     </div>
-                    <div>
-                        <div style="background-color: #e4e6eb; aspect-ratio: 1/1;  border-radius: 8px;"></div>
-                        <p style="font-size: 12px; margin-top: 4px;">Friend Two</p>
-                    </div>
-                    <div>
-                        <div style="background-color: #e4e6eb;  aspect-ratio: 1/1;  border-radius: 8px;"></div>
-                        <p style="font-size: 12px; margin-top: 4px;">Friend Three</p>
-                    </div>
+                @endforeach
                 </div>
                 <button class="btn btn-secondary" style="width: 100%; margin-top: 10px;">See All Friends</button>
             </div>
@@ -88,82 +111,35 @@
         <div class="main-content">
             <!-- Create Post -->
             <div class="create-post">
+            @include('create_post')
                 <div class="post-input">
-                    <div class="avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="post-text">What's on your mind, Newaz?</div>
+                    <img src="{{ asset('storage/' . $user->image) }}" alt="Profile">
+                    <input type="text" placeholder="What's on your mind, {{$user->first_name}}?" onclick="openpostModal()">
                 </div>
-                <div class="post-options">
-                    <div class="post-option">
+                <div class="post-actions">
+                    <div class="post-action live-video">
                         <i class="fas fa-video"></i>
                         <span>Live video</span>
                     </div>
-                    <div class="post-option">
-                        <i class="fas fa-photo-video"></i>
+                    <div class="post-action photo-video">
+                        <i class="fas fa-images"></i>
                         <span>Photo/video</span>
                     </div>
-                    <div class="post-option">
+                    <div class="post-action feeling-activity">
                         <i class="fas fa-smile"></i>
-                        <span>Life event</span>
+                        <span>Feeling/activity</span>
                     </div>
                 </div>
             </div>
-
-            <!-- Post 1 -->
-            <div class="post">
-                <div class="post-header">
-                    <div class="avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div>
-                        <div class="post-author">Newaz Mohammad Hamim</div>
-                        <div class="post-time">Yesterday at 3:45 PM · <i class="fas fa-globe-americas"></i></div>
-                    </div>
-                </div>
-                <div class="post-content">
-                    <p>Enjoying a beautiful day out with friends! 😊</p>
-                </div>
-                <div class="post-image"></div>
-                <div class="post-stats">
-                    <div><i class="fas fa-thumbs-up"></i> 125</div>
-                    <div>24 Comments · 5 Shares</div>
-                </div>
-                <div class="post-actions">
-                    <div class="post-action"><i class="far fa-thumbs-up"></i> Like</div>
-                    <div class="post-action"><i class="far fa-comment"></i> Comment</div>
-                    <div class="post-action"><i class="fas fa-share"></i> Share</div>
-                </div>
-            </div>
-
-            <!-- Post 2 -->
-            <div class="post">
-                <div class="post-header">
-                    <div class="avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div>
-                        <div class="post-author">Newaz Mohammad Hamim</div>
-                        <div class="post-time">3 days ago · <i class="fas fa-globe-americas"></i></div>
-                    </div>
-                </div>
-                <div class="post-content">
-                    <p>Just finished reading an amazing book! Highly recommend "The Alchemist" by Paulo Coelho.</p>
-                </div>
-                <div class="post-stats">
-                    <div><i class="fas fa-thumbs-up"></i> 89</div>
-                    <div>15 Comments · 2 Shares</div>
-                </div>
-                <div class="post-actions">
-                    <div class="post-action"><i class="far fa-thumbs-up"></i> Like</div>
-                    <div class="post-action"><i class="far fa-comment"></i> Comment</div>
-                    <div class="post-action"><i class="fas fa-share"></i> Share</div>
-                </div>
-            </div>
+            @foreach($posts as $post)
+                @include('partials.post', ['post' => $post])
+            @endforeach
         </div>
        
     </div>
-
+    <script src="{{ asset('js/post_create.js') }}"></script>
+    <script src="{{ asset('js/like.js') }}"></script>
+    <script src="{{ asset('js/comment.js') }}"></script>
     <script>
         // Simple tab functionality
         document.querySelectorAll('.tab').forEach(tab => {
@@ -173,9 +149,6 @@
             });
         });
         
-        // Post creation placeholder click
-        document.querySelector('.post-text').addEventListener('click', function() {
-            alert('Post creation dialog would open here');
-        });
+       
     </script>
 @endsection
