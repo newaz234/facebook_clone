@@ -6,6 +6,7 @@
   use App\Http\Controllers\FriendController; 
   use App\Http\Controllers\CommentController;
   use App\Http\Controllers\ProfileController;
+  use App\Http\Controllers\MessageController;
 
   //Route::post('/signup', [AuthController::class, 'signup'])->name('signup');
    Route::get('/verify', fn() => view('verify'))->name('verify');
@@ -42,6 +43,12 @@
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     //profile
     Route::get('/profile',[ProfileController::class, 'profile'])->name('profile');
+//message
+    Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/{conversation}', [MessageController::class, 'show'])->name('messages.show');
+    Route::get('/messages/create/{user}', [MessageController::class, 'create'])->name('messages.create');
+    Route::post('/messages/{conversation}', [MessageController::class, 'store'])->name('messages.store');
+    Route::get('/api/users', [MessageController::class, 'getUsers'])->name('messages.users');
 
         });
     Route::get('/forget-password', fn() => view('forget-pass'))->name('forget-pass');
