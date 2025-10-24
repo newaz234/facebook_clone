@@ -13,7 +13,6 @@
       <div class="success-message">{{ session('success') }}</div>
     @endif
 </div>
-
     <h2 class="welcome">Welcome to Facebook!</h2>
     <!-- Main Content -->
     <div class="container" id="main">
@@ -27,87 +26,11 @@
                 <i class="fas fa-user-friends"></i>
                 <span onclick="window.location.href='{{ route('friends.index') }}'">Friends</span>
             </a>
-            <a href="#" class="sidebar-link">
-                <i class="fas fa-users"></i>
-                <span>Groups</span>
-            </a>
-            <a href="#" class="sidebar-link">
-                <i class="fas fa-store"></i>
-                <span>Marketplace</span>
-            </a>
-            <a href="#" class="sidebar-link">
-                <i class="fas fa-video"></i>
-                <span>Watch</span>
-            </a>
-            <a href="#" class="sidebar-link">
-                <i class="fas fa-history"></i>
-                <span>Memories</span>
-            </a>
-            <a href="#" class="sidebar-link">
-                <i class="fas fa-bookmark"></i>
-                <span>Saved</span>
-            </a>
-            <a href="#" class="sidebar-link">
-                <i class="fas fa-flag"></i>
-                <span>Pages</span>
-            </a>
-            <a href="#" class="sidebar-link">
-                <i class="fas fa-calendar"></i>
-                <span>Events</span>
-            </a>
-            <a href="#" class="sidebar-link">
-                <i class="fas fa-chevron-down"></i>
-                <span>See more</span>
-            </a>
-            
-            <div class="divider"></div>
-            
-            <div class="sidebar-heading">Your shortcuts</div>
-            <a href="#" class="sidebar-link">
-                <i class="fas fa-gamepad"></i>
-                <span>Gaming</span>
-            </a>
-            <a href="#" class="sidebar-link">
-                <i class="fas fa-heart"></i>
-                <span>Dating</span>
-            </a>
-            <a href="#" class="sidebar-link">
-                <i class="fas fa-compass"></i>
-                <span>Travel</span>
-            </a>
+    
         </div>
         
         <!-- Main Content -->
-        <div class="main-content">
-            <!-- Stories -->
-            <div class="stories-container">
-                <div class="story">
-                    <img src="https://picsum.photos/id/100/112/200" alt="Story">
-                    <img class="story-avatar" src="https://randomuser.me/api/portraits/men/1.jpg" alt="Avatar">
-                    <div class="story-username">Your Story</div>
-                </div>
-                <div class="story">
-                    <img src="https://picsum.photos/id/101/112/200" alt="Story">
-                    <img class="story-avatar" src="https://randomuser.me/api/portraits/women/2.jpg" alt="Avatar">
-                    <div class="story-username">Sarah</div>
-                </div>
-                <div class="story">
-                    <img src="https://picsum.photos/id/102/112/200" alt="Story">
-                    <img class="story-avatar" src="https://randomuser.me/api/portraits/men/3.jpg" alt="Avatar">
-                    <div class="story-username">Mike</div>
-                </div>
-                <div class="story">
-                    <img src="https://picsum.photos/id/103/112/200" alt="Story">
-                    <img class="story-avatar" src="https://randomuser.me/api/portraits/women/4.jpg" alt="Avatar">
-                    <div class="story-username">Emma</div>
-                </div>
-                <div class="story">
-                    <img src="https://picsum.photos/id/104/112/200" alt="Story">
-                    <img class="story-avatar" src="https://randomuser.me/api/portraits/men/5.jpg" alt="Avatar">
-                    <div class="story-username">Alex</div>
-                </div>
-            </div>
-            
+        <div class="main-content">  
             <!-- Create Post -->
             <div class="create-post">
             @include('create_post')
@@ -140,56 +63,22 @@
         
         <!-- Right Sidebar -->
         <div class="right-sidebar">
-            <div class="sponsored">
-                <div class="sidebar-title">Sponsored</div>
-                <div class="sponsored-item">
-                    <img src="#" alt="Ad">
-                    <div>
-                        <div>Summer Collection 2023</div>
-                        <div>example.com</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="birthdays">
-                <div class="sidebar-title">Birthdays</div>
-                <div class="birthday-item">
-                    <i class="fas fa-gift"></i>
-                    <span><strong>Emma Thompson</strong> and <strong>2 others</strong> have birthdays today.</span>
-                </div>
-            </div>
-            
+         
             <div class="divider"></div>
             
             <div class="contacts">
                 <div class="sidebar-title">Contacts</div>
-                <div class="contact">
-                    <div class="online-status">
-                        <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Contact">
+                
+                @foreach($friends as $friend)
+                    <div class="contact">
+                        <div class="online-status">
+                            <img src="{{ asset('storage/' . $friend->image) }}" alt="{{ $friend->first_name }}">
+                        </div>
+                        <span>{{ $friend->first_name }} {{ $friend->surname }}</span>
                     </div>
-                    <span>Sarah Johnson</span>
-                </div>
-                <div class="contact">
-                    <div class="online-status">
-                        <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Contact">
-                    </div>
-                    <span>Mike Williams</span>
-                </div>
-                <div class="contact">
-                    <div class="online-status">
-                        <img src="https://randomuser.me/api/portraits/women/4.jpg" alt="Contact">
-                    </div>
-                    <span>Emma Thompson</span>
-                </div>
-                <div class="contact">
-                    <img src="https://randomuser.me/api/portraits/men/5.jpg" alt="Contact">
-                    <span>Alex Rodriguez</span>
-                </div>
-                <div class="contact">
-                    <img src="https://randomuser.me/api/portraits/women/6.jpg" alt="Contact">
-                    <span>Lisa Brown</span>
-                </div>
+                @endforeach
             </div>
+
         </div>
     </div>
     <script src="{{ asset('js/post_create.js') }}"></script>

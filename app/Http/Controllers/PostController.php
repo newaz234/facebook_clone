@@ -12,7 +12,14 @@ class PostController extends Controller
     {
         $posts = Post::with('user','likes')->latest()->get();
         $user = Auth::user();
-        return view('hompage', compact('posts','user'));
+        $pendingRequests = Auth::user()->pendingFriendRequests()->with('sender')->get();
+        $user = Auth::user();
+        $sentFriends = $user->sentFriends()->get();
+        $receivedFriends = $user->receivedFriends()->get();
+
+        // merge করে duplicate বাদ দাও (id অনুযায়ী)
+        $friends = $sentFriends->merge($receivedFriends)->unique('id')->values();
+        return view('hompage', compact('posts','user','friends'));
     }
 
     public function store(Request $request)

@@ -15,10 +15,10 @@
             <div class="conversation-header">
                 <div class="d-flex align-items-center">
                  
-                    <h4 class="mb-0 fw-bold">Messages</h4>
+                    <h4 class="mb-0 fw-bold"style="color:black">Messages</h4>
                 </div>
-                <button class="new-chat-btn mt-3 w-100" onclick="openNewMessageModal()">
-                    <i class="fas fa-edit me-2"></i>New Message
+                <button class="new-chat-btn mt-3 w-100"onclick="openNewMessageModal()">
+                    <i class="fas fa-edit me-2"style="color:black"></i><span  style="color:black">New Message</span>
                 </button>
             </div>
 

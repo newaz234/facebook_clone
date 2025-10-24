@@ -6,6 +6,36 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    .messages-container-scroll {
+        transition: opacity 0.2s ease-in-out;
+    }
+    
+    .message-wrapper {
+        animation: messageSlideIn 0.3s ease-out;
+    }
+    
+    @keyframes messageSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .send-button {
+        transition: all 0.2s ease;
+    }
+    
+    .send-button:active {
+        transform: scale(0.95);
+    }
+</style>
+@endsection
+
 @section('content')
 <div class="container-fluid">
     <div class="row messages-container mx-auto" style="max-width: 1200px;">
@@ -92,6 +122,8 @@
                                 {{ $message->created_at->format('g:i A') }}
                                 @if($message->user_id == Auth::id() && $message->is_read)
                                     <i class="fas fa-check-double ms-1" style="font-size: 0.7rem;"></i>
+                                @elseif($message->user_id == Auth::id())
+                                    <i class="fas fa-check ms-1" style="font-size: 0.7rem;"></i>
                                 @endif
                             </div>
                         </div>
@@ -135,6 +167,7 @@
         </div>
     </div>
 </div>
+
 <script>
 function openConversation(conversationId) {
     window.location.href = `/messages/${conversationId}`;
@@ -153,7 +186,7 @@ function loadUsers() {
             const userList = document.getElementById('userList');
             userList.innerHTML = users.map(user => `
                 <div class="user-list-item d-flex align-items-center" onclick="startConversation(${user.id})">
-                    <img src="{{ asset('storage/' . $user->image) }}?name=${encodeURIComponent(user.first_name)}&background=var(--primary-color)&color=ffffff&size=64" 
+                    <img src="{{ asset('storage/') }}/${user.image}?name=${encodeURIComponent(user.first_name)}&background=var(--primary-color)&color=ffffff&size=64" 
                          class="modal-user-avatar me-3">
                     <div>
                         <h6 class="mb-0 fw-semibold">${user.first_name}</h6>
@@ -166,10 +199,30 @@ function loadUsers() {
 
 function startConversation(userId) {
     window.location.href = `/messages/create/${userId}`;
-    $('#newMessageModal').modal('hide');
 }
 
-// AJAX message sending
+// Auto-resize textarea
+function autoResize(textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+}
+
+// Smooth scroll to bottom
+function scrollToBottom(smooth = false) {
+    const container = document.getElementById('messagesContainer');
+    if (container) {
+        if (smooth) {
+            container.scrollTo({
+                top: container.scrollHeight,
+                behavior: 'smooth'
+            });
+        } else {
+            container.scrollTop = container.scrollHeight;
+        }
+    }
+}
+
+// AJAX message sending with optimistic UI
 document.getElementById('messageForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
@@ -179,6 +232,26 @@ document.getElementById('messageForm').addEventListener('submit', function(e) {
     
     if (!messageBody) return;
     
+    // Optimistically add message immediately
+    const messagesContainer = document.getElementById('messagesContainer');
+    const tempId = 'temp-' + Date.now();
+    const messageHtml = `
+        <div class="message-wrapper text-end" id="${tempId}">
+            <div class="message-bubble message-sent">
+                ${messageBody}
+                <div class="message-time">
+                    Sending...
+                </div>
+            </div>
+        </div>
+    `;
+    
+    messagesContainer.insertAdjacentHTML('beforeend', messageHtml);
+    messageInput.value = '';
+    messageInput.style.height = 'auto';
+    scrollToBottom(true);
+    
+    // Send to server
     fetch(this.action, {
         method: 'POST',
         body: formData,
@@ -189,85 +262,109 @@ document.getElementById('messageForm').addEventListener('submit', function(e) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Add new message to container
-            const messagesContainer = document.getElementById('messagesContainer');
-            const message = data.message;
-            const isOwnMessage = message.user_id == {{ Auth::id() }};
-            
-            const messageHtml = `
-                <div class="message-wrapper ${isOwnMessage ? 'text-end' : ''}">
-                    <div class="message-bubble ${isOwnMessage ? 'message-sent' : 'message-received'}">
-                        ${message.body}
-                        <div class="message-time">
-                            Just now
-                            ${isOwnMessage ? '<i class="fas fa-check ms-1" style="font-size: 0.7rem;"></i>' : ''}
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            messagesContainer.innerHTML += messageHtml;
-            messageInput.value = '';
-            messageInput.style.height = 'auto';
-            scrollToBottom();
+            // Update temporary message with real data
+            const tempMessage = document.getElementById(tempId);
+            if (tempMessage) {
+                const timeDiv = tempMessage.querySelector('.message-time');
+                timeDiv.innerHTML = `
+                    Just now
+                    <i class="fas fa-check ms-1" style="font-size: 0.7rem;"></i>
+                `;
+            }
         }
+    })
+    .catch(() => {
+        // Remove temp message on error
+        const tempMessage = document.getElementById(tempId);
+        if (tempMessage) {
+            tempMessage.remove();
+        }
+        alert('Failed to send message. Please try again.');
     });
 });
 
-// Auto-resize textarea
-function autoResize(textarea) {
-    textarea.style.height = 'auto';
-    textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
-}
+// Improved polling with better performance
+let lastMessageCount = 0;
+let lastHTML = '';
+let isUserTyping = false;
 
-// Scroll to bottom
-function scrollToBottom() {
-    const container = document.getElementById('messagesContainer');
-    if (container) {
-        container.scrollTop = container.scrollHeight;
-    }
+function checkForNewMessages() {
+    // Don't update if user is typing
+    if (isUserTyping) return;
+    
+    const messagesContainer = document.getElementById('messagesContainer');
+    const scrollPos = messagesContainer.scrollTop;
+    const isAtBottom = messagesContainer.scrollHeight - messagesContainer.clientHeight <= scrollPos + 50;
+
+    fetch(window.location.href, { 
+        cache: 'no-store',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newMessagesContainer = doc.getElementById('messagesContainer');
+
+            if (newMessagesContainer && newMessagesContainer.innerHTML !== lastHTML) {
+                const newMessageCount = newMessagesContainer.children.length;
+                const hasNewMessages = newMessageCount > lastMessageCount;
+                
+                lastHTML = newMessagesContainer.innerHTML;
+                lastMessageCount = newMessageCount;
+
+                // Smooth fade transition
+                messagesContainer.style.opacity = '0.5';
+                
+                setTimeout(() => {
+                    messagesContainer.innerHTML = newMessagesContainer.innerHTML;
+                    messagesContainer.style.opacity = '1';
+                    
+                    if (isAtBottom || hasNewMessages) {
+                        scrollToBottom(true);
+                    }
+                }, 100);
+            }
+        })
+        .catch(error => {
+            console.error('Error checking messages:', error);
+        });
 }
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
     scrollToBottom();
-
+    
     const messagesContainer = document.getElementById('messagesContainer');
-    messagesContainer.style.transition = 'opacity 3s ease';
-
-    setInterval(() => {
-        const scrollPos = messagesContainer.scrollTop;
-        const isAtBottom = messagesContainer.scrollHeight - messagesContainer.clientHeight <= scrollPos + 10;
-
-        fetch(window.location.href, { cache: 'no-store' })
-            .then(response => response.text())
-            .then(html => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const newMessagesContainer = doc.getElementById('messagesContainer');
-
-                if (newMessagesContainer) {
-                    // Fade out slightly for smooth transition
-                    messagesContainer.style.opacity = '0.6';
-
-                    // Small delay so it feels natural
-                    setTimeout(() => {
-                        // Only replace if content actually changed
-                        if (messagesContainer.innerHTML !== newMessagesContainer.innerHTML) {
-                            messagesContainer.innerHTML = newMessagesContainer.innerHTML;
-                            if (isAtBottom) scrollToBottom();
-                        }
-                        messagesContainer.style.opacity = '1';
-                    }, 150);
-                }
-            })
-            .catch(console.error);
-    }, 1000);
+    const messageInput = document.querySelector('.message-input');
+    
+    lastHTML = messagesContainer.innerHTML;
+    lastMessageCount = messagesContainer.children.length;
+    
+    // Track when user is typing
+    messageInput.addEventListener('input', function() {
+        isUserTyping = true;
+        clearTimeout(window.typingTimeout);
+        window.typingTimeout = setTimeout(() => {
+            isUserTyping = false;
+        }, 1000);
+    });
+    
+    messageInput.addEventListener('blur', function() {
+        isUserTyping = false;
+    });
+    
+    // Start polling every 2 seconds
+    setInterval(checkForNewMessages, 2000);
+    
+    // Handle Enter key for sending
+    messageInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            document.getElementById('messageForm').dispatchEvent(new Event('submit'));
+        }
+    });
 });
-
-
-// Mobile navigation
-
 
 // Search functionality
 document.getElementById('userSearch')?.addEventListener('input', function(e) {
@@ -276,43 +373,13 @@ document.getElementById('userSearch')?.addEventListener('input', function(e) {
     
     userItems.forEach(item => {
         const userName = item.querySelector('h6').textContent.toLowerCase();
-        if (userName.includes(searchTerm)) {
-            item.style.display = 'flex';
-        } else {
-            item.style.display = 'none';
-        }
+        item.style.display = userName.includes(searchTerm) ? 'flex' : 'none';
     });
 });
- // Mobile navigation between conversation list and chat
- function toggleConversationList() {
-            document.querySelector('.conversation-list').classList.toggle('active');
-        }
 
-        // Auto-resize textarea
-        function autoResize(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
-        }
-
-        // Scroll to bottom of messages
-        function scrollToBottom() {
-            const container = document.getElementById('messagesContainer');
-            if (container) {
-                container.scrollTop = container.scrollHeight;
-            }
-        }
-
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            scrollToBottom();
-            
-            // Auto-resize message input
-            const messageInput = document.querySelector('.message-input');
-            if (messageInput) {
-                messageInput.addEventListener('input', function() {
-                    autoResize(this);
-                });
-            }
-        });
+// Mobile navigation
+function toggleConversationList() {
+    document.querySelector('.conversation-list').classList.toggle('active');
+}
 </script>
 @endsection
