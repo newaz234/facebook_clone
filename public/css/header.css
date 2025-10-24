@@ -52,8 +52,9 @@
  }
  .nav-icons {
     display: flex;
-   gap:15%;
+   gap:25%;
     width:46%;
+      justify-content: center;
  }
  .nav-icon {
     width: 40px;
