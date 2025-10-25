@@ -22,6 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'verification_code',
         'is_verified',
         'image',
+        'cover_photo',
     ];
 
     protected $hidden = [
@@ -56,6 +57,14 @@ public function sentFriendRequests()
         ->wherePivot('status', 'accepted')
         ->withTimestamps();
     }
+    public function allfriends()
+    {
+        $sentFriends = $this->sentFriends()->get();
+        $receivedFriends = $this->receivedFriends()->get();
+
+        // merge করে duplicate বাদ দাও (id অনুযায়ী)
+        return $sentFriends->merge($receivedFriends)->unique('id')->values();
+    }
 // যাদের আমি ফ্রেন্ড রিকোয়েস্ট পাঠিয়েছি (accepted হয়েছে)
 public function sentFriends()
 {
@@ -63,7 +72,25 @@ public function sentFriends()
                 ->wherePivot('status', 'accepted')
                 ->withTimestamps();
 }
-
+public function isFriendWith($userId)
+{
+    return $this->sentFriends()->where('users.id', $userId)->exists() ||
+           $this->receivedFriends()->where('users.id', $userId)->exists();
+}
+public function hasSentFriendRequestTo($userId)
+{
+    return $this->sentFriendRequests()
+                ->where('receiver_id', $userId)
+                ->where('status', 'pending')
+                ->exists();
+}
+public function hasReceivedFriendRequestFrom($userId)
+{
+    return $this->receivedFriendRequests()
+                ->where('sender_id', $userId)
+                ->where('status', 'pending')
+                ->exists();
+}
 // যাদের কাছ থেকে আমি রিকোয়েস্ট পেয়েছি (accepted হয়েছে)
 public function receivedFriends()
 {

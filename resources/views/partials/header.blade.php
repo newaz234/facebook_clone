@@ -5,7 +5,10 @@
             </div>
             <div class="search-container">
                 <i class="fas fa-search"></i>
-                <input type="text" placeholder="Search Facebook">
+                <form action="{{ route('search') }}" method="GET">
+                    @csrf
+                    <input type="text" name="query" placeholder="Search Facebook" value="{{ request('query') }}">
+                </form>
             </div>
         </div>
         <div class="nav-icons">

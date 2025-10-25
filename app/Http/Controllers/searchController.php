@@ -24,7 +24,6 @@ class SearchController extends Controller
                      ->with('user', 'likes', 'comments')
                      ->latest()
                      ->get();
-
         return view('search-result', compact('people', 'posts', 'query','user'));
     }
 }
