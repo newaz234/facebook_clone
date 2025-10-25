@@ -8,12 +8,6 @@
 <link rel="stylesheet" href="{{ asset('css/post.css') }}">
 @endsection
 @section('content')
-<div class="content">
-    @if (session('success'))
-      <div class="success-message">{{ session('success') }}</div>
-    @endif
-</div>
-    <h2 class="welcome">Welcome to Facebook!</h2>
     <!-- Main Content -->
     <div class="container" id="main">
         <!-- Left Sidebar -->
@@ -39,17 +33,9 @@
                     <input type="text" placeholder="What's on your mind, {{$user->first_name}}?" onclick="openpostModal()">
                 </div>
                 <div class="post-actions">
-                    <div class="post-action live-video">
-                        <i class="fas fa-video"></i>
-                        <span>Live video</span>
-                    </div>
-                    <div class="post-action photo-video">
+                    <div class="post-action photo-video" onclick="openpostModal()">
                         <i class="fas fa-images"></i>
                         <span>Photo/video</span>
-                    </div>
-                    <div class="post-action feeling-activity">
-                        <i class="fas fa-smile"></i>
-                        <span>Feeling/activity</span>
                     </div>
                 </div>
             </div>

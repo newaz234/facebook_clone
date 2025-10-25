@@ -75,10 +75,7 @@ class PostController extends Controller
 
         $post->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Post deleted successfully'
-        ]);
+        return redirect()->back()->with('success', 'Profile picture updated!');
     }
     public function toggleLike(Post $post)
 {

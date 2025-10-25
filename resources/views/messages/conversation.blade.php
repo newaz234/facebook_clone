@@ -102,7 +102,7 @@
                 </div>
                 <div class="d-flex align-items-center">
                     <div class="position-relative">
-                        <img src="{{ asset('storage/' . $otherUser->first()->image) }}?name={{ urlencode($otherUsers->first()->name) }}&background=var(--primary-color)&color=ffffff&size=128" 
+                        <img src="{{ asset('storage/' . $otherUsers->first()->image) }}?name={{ urlencode($otherUsers->first()->name) }}&background=var(--primary-color)&color=ffffff&size=128" 
                              class="user-avatar me-3"
                              alt="{{ $otherUsers->first()->first_name }}">
                     </div>

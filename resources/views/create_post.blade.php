@@ -29,7 +29,7 @@
                         name="content"
                         required
                     ></textarea>
-                    <button type="button" class="emoji-btn">😊</button>
+                  
                 </div>
                 
                 <!-- Image Preview Area -->
@@ -39,17 +39,12 @@
                         <button type="button" id="removeImageBtn" style="position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;">✕</button>
                     </div>
                 </div>
-                
-                <button type="button" class="text-format-btn">Aa</button>
             <div class="footer">
                 <div class="add-to-post">
                     <span class="add-to-post-text">Add to your post</span>
                     <div class="add-options">
                         <input type="file" id="imageInput" name="image" accept="image/*" style="display: none;">
                         <button type="button" class="option-btn" title="Photo/Video" onclick="document.getElementById('imageInput').click()">🖼️</button>
-                        <button type="button" class="option-btn" title="Tag People">👥</button>
-                        <button type="button" class="option-btn" title="Feeling/Activity">😊</button>
-                        <button type="button" class="option-btn" title="More">⋯</button>
                     </div>
                 </div>
                 <button type="submit" class="post-btn" id="postBtn">Post</button>

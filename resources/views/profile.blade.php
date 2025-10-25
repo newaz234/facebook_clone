@@ -107,7 +107,7 @@
                     </div>
                 @endforeach
                 </div>
-                <button class="btn btn-secondary" style="width: 100%; margin-top: 10px;">See All Friends</button>
+                <button class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="window.location.href='{{ route('friends.all') }}'">See All Friends</button>
             </div>
         </div>
 

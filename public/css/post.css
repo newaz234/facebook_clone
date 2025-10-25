@@ -128,3 +128,15 @@
    text-decoration: underline;
    cursor:pointer;
 }
+.post-info span:hover{
+   text-decoration: underline;
+   cursor:pointer;
+}
+.post-header .delete{
+   margin-left:auto;
+   align-items:space-between;
+   cursor:pointer;
+   color:#65676b;
+   font-weight: 900;
+   font-size:large;
+}
