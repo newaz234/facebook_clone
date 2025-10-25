@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use App\Models\FriendRequest;
-
+use Illuminate\Support\Facades\Storage;
 class ProfileController extends Controller
 {
     public function profile()
@@ -47,5 +47,44 @@ class ProfileController extends Controller
 
     return view('otherprofile', compact('user', 'posts', 'friends', 'isFriend', 'requestSent', 'requestReceived'));
 }
+public function updateImage(Request $request)
+{
+    $request->validate([
+        'image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+    ]);
 
+    $user = auth()->user();
+
+    // Delete old image if exists
+    if ($user->image && \Storage::exists('public/' . $user->image)) {
+        \Storage::delete('public/' . $user->image);
+    }
+
+    // Store new one
+    $path = $request->file('image')->store('profile_images', 'public');
+
+    $user->update(['image' => $path]);
+
+    return redirect()->back()->with('success', 'Profile picture updated!');
+}
+
+public function updateCoverPhoto(Request $request)
+{
+    $request->validate([
+        'cover_photo' => 'required|image|mimes:jpg,jpeg,png|max:4096',
+    ]);
+
+    $user = auth()->user();
+
+    // পুরনো cover photo delete করো
+    if ($user->cover_photo) {
+        Storage::delete('public/' . $user->cover_photo);
+    }
+
+    $path = $request->file('cover_photo')->store('covers', 'public');
+    $user->cover_photo = $path;
+    $user->save();
+
+    return back()->with('success', 'Cover photo updated successfully.');
+}
 }

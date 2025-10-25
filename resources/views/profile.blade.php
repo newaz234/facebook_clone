@@ -12,11 +12,22 @@
     <!-- Profile Header -->
     <div class="profile-header">
         <div class="cover-photo">
-        <img src="{{ asset('storage/' . $user->image) }}" alt="Profile">
+        <img src="{{ asset('storage/' . $user->cover_photo) }}" alt="Profile" onclick="uploadcover()">
         </div>
         <div class="profile-picture">
-        <img src="{{ asset('storage/' . $user->image) }}" alt="Profile">
+        <img src="{{ asset('storage/' . $user->image) }}" alt="Profile" onclick="uploadprofile()">
         </div>
+        <form id="profileImageForm" action="{{ route('profile.update.image') }}" method="POST" enctype="multipart/form-data" style="display:none;">
+            @csrf
+            @method('PUT')
+            <input type="file" id="profileImageInput" name="image" accept="image/*" onchange="submitProfileImage()">
+        </form>
+        <form id="coverImageForm" action="{{ route('profile.update.cover') }}" method="POST" enctype="multipart/form-data" style="display:none;">
+            @csrf
+            @method('PUT')
+            <input type="file" id="coverImageInput" name="cover_photo" accept="image/*" onchange="submitCoverImage()">
+        </form>
+
         <div class="profile-info">
            
             <div class="profile-stats">
@@ -25,19 +36,12 @@
             </div>
            
             <div class="profile-actions">
-                <button class="btn btn-primary">Add to Story</button>
-                <button class="btn btn-secondary">Edit Profile</button>
+                <button class="btn btn-primary"> Edit Profile</button>
             </div>
         </div>
         <div class="profile-nav">
             <div class="nav-tabs">
-                <div class="tab active">Posts</div>
-                <div class="tab">About</div>
                 <div class="tab" onclick="window.location.href='{{ route('friends.index') }}'">Friends</div>
-                <div class="tab">Photos</div>
-                <div class="tab">Videos</div>
-                <div class="tab">Reels</div>
-                <div class="tab">More ...</div>
             </div>
         </div>
     </div>
@@ -99,7 +103,7 @@
                         <div style="background-color: #e4e6eb;  aspect-ratio: 1/1; ; border-radius: 8px;">
                         <img src="{{ $friend->image ? asset('storage/' . $friend->image) : 'https://randomuser.me/api/portraits/men/2.jpg' }}" style="width:100%; height:100%; object-fit:cover;">
                         </div>
-                        <p style="font-size: 12px; margin-top: 4px;">{{ $friend->first_name }} {{ $friend->surname }}</p>
+                        <p  class="name" style="font-size: 12px; margin-top: 4px;" onclick="window.location.href='{{ route('profile.show', $friend->id) }}'" >{{ $friend->first_name }} {{ $friend->surname }}</p>
                     </div>
                 @endforeach
                 </div>
@@ -148,7 +152,26 @@
                 this.classList.add('active');
             });
         });
-        
-       
     </script>
+    <script>
+function uploadprofile() {
+    // Open file selector when clicking on the profile image
+    document.getElementById('profileImageInput').click();
+}
+
+function submitProfileImage() {
+    // Automatically submit the hidden form when an image is selected
+    document.getElementById('profileImageForm').submit();
+}
+function uploadcover() {
+    // Cover photo select
+    document.getElementById('coverImageInput').click();
+}
+
+function submitCoverImage() {
+    // Submit cover photo form
+    document.getElementById('coverImageForm').submit();
+}
+</script>
+
 @endsection

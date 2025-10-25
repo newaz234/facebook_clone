@@ -22,6 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'verification_code',
         'is_verified',
         'image',
+        'cover_photo',
     ];
 
     protected $hidden = [

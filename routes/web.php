@@ -44,6 +44,8 @@
     //profile
     Route::get('/profile',[ProfileController::class, 'profile'])->name('profile');
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile/update-image', [ProfileController::class, 'updateImage'])->name('profile.update.image');
+    Route::put('/profile/update-cover', [ProfileController::class, 'updateCoverPhoto'])->name('profile.update.cover');
     //message
     Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
     Route::get('/messages/{conversation}', [MessageController::class, 'show'])->name('messages.show');
