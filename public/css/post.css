@@ -124,3 +124,7 @@
 .feeling-activity i {
    color: #f7b928;
 }
+.post-info h3:hover{
+   text-decoration: underline;
+   cursor:pointer;
+}

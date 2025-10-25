@@ -79,7 +79,7 @@
                         </div>
                         {{ Auth::user()->mutualFriendsCount($friend) }} mutual friends
                     </div>
-                    <button class="message-btn">Message</button>
+                    <button class="message-btn" onclick="window.location.href='{{ route('messages.create', $friend->id) }}'">Message</button>
                 </div>
             </div>
             @endforeach
@@ -93,13 +93,7 @@
 </div>
 
 <script>
-    document.querySelectorAll('.message-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const card = this.closest('.friend-card');
-            const friendName = card.querySelector('.friend-name').textContent;
-            alert(`Message ${friendName}`);
-        });
-    });
+   
 
     document.querySelectorAll('.menu-item').forEach(item => {
         item.addEventListener('click', function() {
