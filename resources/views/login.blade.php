@@ -152,7 +152,7 @@
         <button type="submit">Log in</button>
         <a href="{{ route('forget-pass') }}">Forgotten password?</a>
         <div class="divider"></div>
-        <button type="button" class="create-btn"onclick="window.location.href='{{ route('signup') }}'" >Create new account</button>
+        <button type="button" class="create-btn" onclick="window.location.href='{{ route('signup') }}'" >Create new account</button>
       </form>
     </div>
   </div>

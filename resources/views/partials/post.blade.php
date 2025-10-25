@@ -2,7 +2,7 @@
                 <div class="post-header">
                     <img src="{{ asset('storage/'. $post->user->image) }}">
                     <div class="post-info">
-                        <h3>{{ $post->user->first_name  }} {{ $post->user->surname}}  </h3>
+                        <h3 onclick="window.location.href='{{ route('profile.show', $post->user->id) }}'">{{ $post->user->first_name  }} {{ $post->user->surname}}  </h3>
                         <span>{{ $post->created_at->diffForHumans() }}<i class="fas fa-globe-americas"></i></span>
                     </div>
                 </div>
@@ -19,7 +19,7 @@
                     </div>
         
                     <div class="comments-shares">
-                        45 comments · 12 shares
+                    {{ $post->comments()->count() }} comments
                     </div>
                 </div>
                 <div class="post-buttons">

@@ -21,7 +21,7 @@
         </div> 
         <div class="user-profile" onclick="window.location.href='{{ route('profile') }}'">
             <img src="{{ asset('storage/' . $user->image) }}" alt="Profile">
-            <span>{{$user->surname}}</span>
+            <span>{{auth()->user()->surname}}</span>
         </div>
     </header>
     

@@ -74,7 +74,7 @@
                         <div class="online-status">
                             <img src="{{ asset('storage/' . $friend->image) }}" alt="{{ $friend->first_name }}">
                         </div>
-                        <span>{{ $friend->first_name }} {{ $friend->surname }}</span>
+                        <span onclick="window.location.href='{{ route('messages.create', $friend->id) }}'">{{ $friend->first_name }} {{ $friend->surname }}</span>
                     </div>
                 @endforeach
             </div>
