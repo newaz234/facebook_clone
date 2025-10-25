@@ -123,10 +123,10 @@ function loadUsers() {
             const userList = document.getElementById('userList');
             userList.innerHTML = users.map(user => `
                 <div class="user-list-item d-flex align-items-center" onclick="startConversation(${user.id})">
-                    <img src="{{ asset('storage/' . $user->image) }}?name=${encodeURIComponent(user.first_name)}&background=007bff&color=ffffff&size=64" 
+                    <img src="/storage/${user.image}?name=${encodeURIComponent(user.first_name)}&background=007bff&color=ffffff&size=64" 
                          class="modal-user-avatar me-3">
                     <div>
-                        <h6 class="mb-0 fw-semibold">${user.first_name}</h6>
+                        <h6 class="mb-0 fw-semibold">${user.first_name} ${user.surname}</h6>
                         <small class="text-muted">Click to start conversation</small>
                     </div>
                 </div>

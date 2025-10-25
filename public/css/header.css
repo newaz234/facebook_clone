@@ -101,3 +101,53 @@
       display:none;
    }
  }
+ .user-profile {
+   position: relative;
+   display: flex;
+   align-items: center;
+   cursor: pointer;
+}
+
+.user-profile img {
+   width: 35px;
+   height: 35px;
+   border-radius: 50%;
+   margin-right: 8px;
+}
+
+.dropdown-menu {
+   position: absolute;
+   top: 50px;
+   right: 0;
+   background: white;
+   border-radius: 8px;
+   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+   display: none;
+   flex-direction: column;
+   width: 180px;
+   z-index: 100;
+}
+
+.dropdown-menu a,
+.dropdown-menu button {
+   display: flex;
+   align-items: center;
+   gap: 10px;
+   padding: 10px 15px;
+   border: none;
+   background: none;
+   width: 100%;
+   text-align: left;
+   color: #333;
+   text-decoration: none;
+   font-size: 15px;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu button:hover {
+   background: #f0f2f5;
+}
+
+.dropdown-menu button {
+   cursor: pointer;
+}

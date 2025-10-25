@@ -144,20 +144,6 @@
    margin-right: 12px;
    object-fit:over;
 }
-.online-status {
-   position: relative;
-}
-.online-status::after {
-   content: '';
-   position: absolute;
-   width: 10px;
-   height: 10px;
-   background: #31a24c;
-   border-radius: 50%;
-   border: 2px solid #fff;
-   bottom: 0;
-   right: 10px;
-}
 @media (max-width: 1000px) {
    
    .left-sidebar {

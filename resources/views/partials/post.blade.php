@@ -5,6 +5,10 @@
                         <h3 onclick="window.location.href='{{ route('profile.show', $post->user->id) }}'">{{ $post->user->first_name  }} {{ $post->user->surname}}  </h3>
                         <span>{{ $post->created_at->diffForHumans() }}<i class="fas fa-globe-americas"></i></span>
                     </div>
+                    @if (auth()->user()->id === $post->user_id)
+                   <div class="delete" onclick="window.location.href='{{ route('posts.destroy', $post) }}'" title="delete">...</div>
+                   @endif
+
                 </div>
               <div id="commentContainer"></div>
                 <div class="post-content">

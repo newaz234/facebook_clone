@@ -5,7 +5,7 @@
     </div>
     <div class="comment-content">
         <div class="comment-bubble">
-            <div class="comment-author">{{ $cmnt->user->first_name }} {{ $cmnt->user->surname }}</div>
+            <div class="comment-author" onclick="window.location.href='{{ route('profile.show', $cmnt->user->id) }}'" >{{ $cmnt->user->first_name }} {{ $cmnt->user->surname }}</div>
             <div class="comment-text">{{ $cmnt->content }}</div>
         </div>
         <div class="comment-meta">
