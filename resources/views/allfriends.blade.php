@@ -70,7 +70,7 @@
                     <img src="{{ asset('storage/' . $friend->image) ?? 'https://randomuser.me/api/portraits/men/'.rand(1,100).'.jpg' }}" alt="Profile">
                 </div>
                 <div class="friend-content">
-                    <div class="friend-name">{{ $friend->first_name }} {{ $friend->surname }}</div>
+                    <div class="friend-name" onclick="window.location.href='{{ route('profile.show', $friend->id) }}'">{{ $friend->first_name }} {{ $friend->surname }}</div>
                     <div class="mutual-friends">
                         <div class="mutual-avatars">
                             <div class="mutual-avatar"></div>

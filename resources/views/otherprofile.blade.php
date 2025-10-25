@@ -25,6 +25,11 @@
         </div>
 
         <div class="profile-actions">
+            @if($user->id === auth()->user()->id)
+                <a class="btn btn-primary">Edit Profile</a>
+            @else
+            {{-- Friend Request Logic --}}
+            {{-- Variables passed from controller: $isFriend, $requestSent, $requestReceived --}}
             {{-- If logged-in user already friends --}}
             @if($isFriend)
                 <form action="{{ route('friends.remove-friend', $user->id) }}" method="POST" style="display:inline;">
@@ -55,6 +60,7 @@
                 </form>
             @endif
             <a href="{{ route('messages.create', $user->id) }}" class="btn btn-primary">Message</a>
+            @endif
         </div>
     </div>
 

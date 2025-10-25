@@ -33,6 +33,10 @@
     .send-button:active {
         transform: scale(0.95);
     }
+    div h5:hover{
+        cursor: pointer;
+        text-decoration: underline;
+    }
 </style>
 @endsection
 
@@ -65,11 +69,10 @@
                                 <img src="{{ asset('storage/' . $otherUser->image) }}?name={{ urlencode($otherUser->name) }}&background=var(--primary-color)&color=ffffff&size=128" 
                                      class="user-avatar"
                                      alt="{{ $otherUser->name }}">
-                                <div class="online-indicator"></div>
                             </div>
                             <div class="ms-3 flex-grow-1">
                                 <div class="d-flex justify-content-between align-items-start">
-                                    <h6 class="mb-1 fw-semibold">{{ $otherUser->first_name }} {{ $otherUser->surname }}</h6>
+                                    <h6 class="mb-1 fw-semibold" >{{ $otherUser->first_name }} {{ $otherUser->surname }}</h6>
                                     @if($conv->latestMessage)
                                         <small class="text-muted">{{ $conv->latestMessage->created_at->format('g:i A') }}</small>
                                     @endif
@@ -104,10 +107,8 @@
                              alt="{{ $otherUsers->first()->first_name }}">
                     </div>
                     <div>
-                        <h5 class="mb-0 fw-bold">{{ $otherUsers->first()->first_name }} {{ $otherUsers->first()->surname }}</h5>
-                        <small class="text-success">
-                            <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i>Online
-                        </small>
+                        <h5 class="mb-0 fw-bold" onclick="window.location.href='{{ route('profile.show', $otherUsers->first()->id) }}'">{{ $otherUsers->first()->first_name }} {{ $otherUsers->first()->surname }}</h5>
+                        
                     </div>
                 </div>
             </div>

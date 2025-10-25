@@ -46,17 +46,46 @@
                             @endif
                         </div>
                         <div class="result-info">
-                            <div class="result-name">{{ $person->first_name }} {{ $person->surname }}</div>
+                            <div class="result-name" onclick="window.location.href='{{ route('profile.show', $person->id) }}'">{{ $person->first_name }} {{ $person->surname }}</div>
                             <div class="result-meta">
-                                {{ $person->job_title ?? 'No title' }} • {{ $person->friends()->count() }} mutual friends
+                                @if($user->id==$person->id)
+                                {{ $person->allfriends()->count() }} friends
+                                @else
+                                 {{ $person->friends()->count() }} mutual friends
+                                 @endif
                             </div>
-                            <div class="result-meta">{{ $person->location ?? 'Unknown' }}</div>
+                         
                         </div>
                     </div>
-                    <div class="action-buttons">
-                        <button class="btn btn-primary">Add Friend</button>
-                        <button class="btn btn-secondary">Message</button>
-                    </div>
+                    <div class="result-actions">
+                        @if($person->id === auth()->user()->id)
+                            <!-- No action buttons for self -->
+                        @else
+                        @if(auth()->user()->isFriendWith($person->id))
+                            <form action="{{ route('friends.remove-friend', $person->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-secondary">Unfriend</button>
+                            </form>
+                        @elseif(auth()->user()->hasSentFriendRequestTo($person->id))
+                            <button class="btn btn-secondary" disabled>Request Sent</button>
+                        @elseif(auth()->user()->hasReceivedFriendRequestFrom($person->id))
+                            <form action="{{ route('friends.accept-request', auth()->user()->receivedFriendRequests()->where('sender_id', $person->id)->first()->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                <button class="btn btn-primary">Accept Request</button>
+                            </form>
+                            <form action="{{ route('friends.reject-request', auth()->user()->receivedFriendRequests()->where('sender_id', $person->id)->first()->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                <button class="btn btn-secondary">Decline</button>
+                            </form>
+                        @else
+                            <form action="{{ route('friends.send-request', $person->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                <button class="btn btn-primary">Add Friend</button>
+                            </form>
+                        @endif
+                        <a href="{{ route('messages.create', $person->id) }}" class="btn btn-primary">Message</a>
+                        @endif
                 </div>
             @empty
                 <p>No people found.</p>
