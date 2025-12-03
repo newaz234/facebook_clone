@@ -29,8 +29,11 @@ class ProfileController extends Controller
 {
     $user = User::findOrFail($id);
     $posts = $user->posts()->latest()->get();
-    $friends = $user->friends;
+    $sentFriends = $user->sentFriends()->get();
+    $receivedFriends = $user->receivedFriends()->get();
 
+    // merge করে duplicate বাদ দাও (id অনুযায়ী)
+    $friends = $sentFriends->merge($receivedFriends)->unique('id')->values();
     $authUser = auth()->user();
 
     $isFriend = $authUser->sentFriends->contains($id);

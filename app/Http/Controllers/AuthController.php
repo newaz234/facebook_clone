@@ -49,7 +49,7 @@ class AuthController extends Controller
             'verification_code' => rand(100000, 999999),
             'image'=>"image/profile_pic.png",
             'is_verified' => false,
-            'cover_photo'=>"image/profile_pic.jpg",
+            'cover_photo'=>"image/profile_pic.png",
         ]);
 
         // Auto login after signup
